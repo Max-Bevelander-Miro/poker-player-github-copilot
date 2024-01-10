@@ -13,7 +13,7 @@ public class PokerHandEvaluator {
             return Bet.RAISE;
         } else if (areConnectingCards(hand) && (hand[0].getRankAsNumber() >= 8 || hand[1].getRankAsNumber() >= 8)) {
             return Bet.RAISE;
-        } else if (hand[0].getRankAsNumber() >= 14 || hand[1].getRankAsNumber() >= 14) {
+        } else if (hand[0].getRankAsNumber() >= 13 || hand[1].getRankAsNumber() >= 13) {
             return Bet.RAISE;
         } else {
             return Bet.FOLD;
