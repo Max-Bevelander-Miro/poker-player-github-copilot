@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class Player {
 
-    static PokerHandEvaluator pokerHandEvaluator = new PokerHandEvaluator();
     static BetCalculator betCalculator = new BetCalculator();
     static final String VERSION = "Default Java folding player";
 
@@ -13,7 +12,6 @@ public class Player {
     }
 
     public static int betRequest(GameState gameState) {
-
         PlayerObj player = gameState.getPlayers().stream()
                 .filter(playerObj -> playerObj.getHole_cards() != null)
                 .filter(p -> p.getHole_cards().length > 0)
@@ -22,11 +20,23 @@ public class Player {
         if(player == null){
             return 0;
         }
-        //is opening hand
-        if (isOpeningHand(gameState)){
+        if (isOpeningHand(gameState)) {
             return betCalculator.calculate(gameState, PokerHandEvaluator.evaluateOpeningHand(player.getHole_cards()));
         }
-        return 0;
+
+        return getNextHandCalc(gameState, player);
+    }
+
+    private static int getNextHandCalc(GameState gameState, PlayerObj player) {
+        PokerHandRanking ranking = PokerHandEvaluator.evaluateHand(player.getHole_cards());
+        if (ranking.ordinal() > 4) {
+            return betCalculator.calculate(gameState, Bet.RAISE);
+        }
+
+        if (ranking.ordinal() > 2) {
+            return betCalculator.calculate(gameState, Bet.MATCH);
+        }
+        return betCalculator.calculate(gameState, Bet.FOLD);
     }
 
     private static boolean isOpeningHand(GameState gameState) {
