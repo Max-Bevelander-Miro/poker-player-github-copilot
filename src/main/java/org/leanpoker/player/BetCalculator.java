@@ -7,6 +7,8 @@ public class BetCalculator {
         switch (bet) {
             case ALL_IN:
                 return remaining;
+            case ONE_THIRD_RAISE:
+                return remaining / 3;
             case RAISE:
                 return Math.min(remaining, getCall(gameState) + gameState.getMinimum_raise());
             case MATCH:
