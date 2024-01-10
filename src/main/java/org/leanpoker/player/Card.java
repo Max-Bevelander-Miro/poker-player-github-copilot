@@ -14,6 +14,20 @@ public class Card {
     public String getRank() {
         return rank;
     }
+    public int getRankAsNumber() {
+        switch (rank) {
+            case "A":
+                return 14;
+            case "K":
+                return 13;
+            case "Q":
+                return 12;
+            case "J":
+                return 11;
+            default:
+                return Integer.parseInt(rank);
+        }
+    }
 
     public void setRank(String rank) {
         this.rank = rank;

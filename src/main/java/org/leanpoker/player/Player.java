@@ -11,6 +11,18 @@ public class Player {
     }
 
     public static int betRequest(GameState gameState) {
+
+        PlayerObj player = gameState.getPlayers().stream().filter(p -> p.getHole_cards().length > 0).findFirst().orElse(null);
+        if(player == null){
+            return 0;
+        }
+        //is opening hand
+        if (gameState.getCommunity_cards().isEmpty()){
+
+        } else{
+
+        }
+
         return 0;
     }
 
