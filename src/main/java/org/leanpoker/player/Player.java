@@ -2,6 +2,9 @@ package org.leanpoker.player;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 public class Player {
 
     static BetCalculator betCalculator = new BetCalculator();
@@ -28,7 +31,10 @@ public class Player {
     }
 
     private static int getNextHandCalc(GameState gameState, PlayerObj player) {
-        PokerHandRanking ranking = PokerHandEvaluator.evaluateHand(player.getHole_cards());
+        Card[] myCards = player.getHole_cards();
+        Card[] communityCards = (Card[]) gameState.getCommunity_cards().toArray();
+        Card[] allCards = Stream.concat(Arrays.stream(myCards), Arrays.stream(communityCards)).toArray(Card[]::new);
+        PokerHandRanking ranking = PokerHandEvaluator.evaluateHand(allCards);
         if (ranking.ordinal() > 4) {
             return betCalculator.calculate(gameState, Bet.RAISE);
         }
