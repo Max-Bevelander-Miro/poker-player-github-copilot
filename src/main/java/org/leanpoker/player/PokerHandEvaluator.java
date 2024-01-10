@@ -45,7 +45,8 @@ public class PokerHandEvaluator {
     }
 
     public static boolean isGoodHand(Card[] hand) {
-        if (isPair(hand) && hand[0].getRankAsNumber() > 8 && hand[1].getRankAsNumber() > 8) {
+        boolean isPair = hand[0].getRankAsNumber() == hand[1].getRankAsNumber();
+        if (isPair && hand[0].getRankAsNumber() > 8 && hand[1].getRankAsNumber() > 8) {
             return true;
         }
 //        if (hand[0].getRankAsNumber() > 9 && hand[1].getRankAsNumber() > 9) {
@@ -136,6 +137,8 @@ public class PokerHandEvaluator {
     }
 
     private static boolean isPair(Card[] hand) {
+
+
         Map<Integer, Integer> rankCounts = new HashMap<>();
         for (Card card : hand) {
             rankCounts.put(card.getRankAsNumber(), rankCounts.getOrDefault(card.getRankAsNumber(), 0) + 1);
