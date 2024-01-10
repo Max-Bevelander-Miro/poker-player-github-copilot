@@ -1,22 +1,21 @@
 package org.leanpoker.player;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.micronaut.http.MediaType;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Consumes;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Post;
-import org.slf4j.LoggerFactory;
+import io.micronaut.http.annotation.*;
 
 import java.util.Map;
 
 @Controller()
 public class PlayerController {
 
-    ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper getMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return mapper;
+    }
 
     @Get(produces = MediaType.TEXT_PLAIN)
     public String doGet() {
@@ -26,10 +25,11 @@ public class PlayerController {
     @Post(produces = MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String doPost(@Body Map<String, String> body) throws JsonProcessingException {
+        ObjectMapper mapper = getMapper();
         String action = body.get("action");
         String gameState = body.get("game_state");
         if ("bet_request".equals(action)) {
-            return String.valueOf(getBetRequest(gameState));
+            return String.valueOf(getBetRequest(gameState, mapper));
         }
         if ("showdown".equals(action)) {
             Player.showdown(mapper.readTree(gameState));
@@ -40,7 +40,7 @@ public class PlayerController {
         return "";
     }
 
-    private int getBetRequest(String gameState) throws JsonProcessingException {
+    private int getBetRequest(String gameState, ObjectMapper mapper) throws JsonProcessingException {
         try {
             GameState gameStateObj = mapper.readValue(gameState, GameState.class);
             return Player.betRequest(gameStateObj);
