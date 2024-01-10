@@ -7,7 +7,7 @@ public class Player {
     static final String VERSION = "Default Java folding player";
 
     public static int betRequest(JsonNode request) {
-        return 0;
+        return 5;
     }
 
     public static void showdown(JsonNode game) {
