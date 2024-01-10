@@ -7,7 +7,7 @@ public class PokerHandEvaluator {
     public static Bet evaluateOpeningHand(Card[] hand) {
         if (isGoodHand(hand)) {
             return Bet.ALL_IN;
-        } else if (isSameSuitFirstHand(hand) && firstHandContainsHighCard(hand)) {
+        } else if (isOneThirdHand(hand)) {
             return Bet.ONE_THIRD_RAISE;
         } else if (isPairFirstHand(hand)) {
             return Bet.RAISE;
@@ -69,15 +69,21 @@ public class PokerHandEvaluator {
         if (isPair && hand[0].getRankAsNumber() > 8 && hand[1].getRankAsNumber() > 8) {
             return true;
         }
-        if (hand[0].getRankAsNumber() > 9 && hand[1].getRankAsNumber() > 9) {
-            return true;
-        }
+        return hand[0].getRankAsNumber() > 9 && hand[1].getRankAsNumber() > 9;
+    }
+
+    private static boolean isOneThirdHand(Card[] hand) {
         boolean containsHighCard = hand[0].getRankAsNumber() > 9 || hand[1].getRankAsNumber() > 9;
         boolean sameSuit = hand[0].getSuit().equals(hand[1].getSuit());
         boolean firstCardIs78Or9 = hand[0].getRankAsNumber() == 7 || hand[0].getRankAsNumber() == 8 || hand[0].getRankAsNumber() == 9;
         boolean secondCardIs78Or9 = hand[1].getRankAsNumber() == 7 || hand[1].getRankAsNumber() == 8 || hand[1].getRankAsNumber() == 9;
-        return containsHighCard && sameSuit && (firstCardIs78Or9 || secondCardIs78Or9);
+        if (containsHighCard && sameSuit && (firstCardIs78Or9 || secondCardIs78Or9)) {
+            return true;
+        }
+
+        return isSameSuitFirstHand(hand) && firstHandContainsHighCard(hand);
     }
+
     public static PokerHandRanking evaluateAllCombinations(Card[] cards) {
         List<Card[]> combinations = generateCombinations(cards);
         PokerHandRanking bestRanking = PokerHandRanking.HIGH_CARD;
