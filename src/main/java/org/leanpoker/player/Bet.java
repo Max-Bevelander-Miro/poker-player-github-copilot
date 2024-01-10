@@ -4,4 +4,5 @@ public enum Bet {
     RAISE,
     MATCH,
     FOLD,
+    ALL_IN
 }

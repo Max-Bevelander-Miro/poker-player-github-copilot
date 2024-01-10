@@ -5,8 +5,9 @@ import java.util.*;
 public class PokerHandEvaluator {
 
     public static Bet evaluateOpeningHand(Card[] hand) {
-        // I will have 2 cards, give me if the rank match or the suit match or 1 card rank is A or K
-        if (hand[0].getRankAsNumber() == hand[1].getRankAsNumber()) {
+        if (isGoodHand(hand)) {
+            return Bet.ALL_IN;
+        } else if (hand[0].getRankAsNumber() == hand[1].getRankAsNumber()) {
             return Bet.RAISE;
         } else if (hand[0].getSuit().equals(hand[1].getSuit())) {
             return Bet.RAISE;
@@ -43,6 +44,23 @@ public class PokerHandEvaluator {
         }
     }
 
+    public static boolean isGoodHand(Card[] hand) {
+        if (isPair(hand) && hand[0].getRankAsNumber() > 8 && hand[1].getRankAsNumber() > 8) {
+            return true;
+        }
+//        if (hand[0].getRankAsNumber() > 9 && hand[1].getRankAsNumber() > 9) {
+//            return true;
+//        }
+//        boolean containsHighCard = hand[0].getRankAsNumber() > 9 || hand[1].getRankAsNumber() > 9;
+//        boolean sameSuit = hand[0].getSuit().equals(hand[1].getSuit());
+//        boolean firstCardIs78Or9 = hand[0].getRankAsNumber() == 7 || hand[0].getRankAsNumber() == 8 || hand[0].getRankAsNumber() == 9;
+//        boolean secondCardIs78Or9 = hand[1].getRankAsNumber() == 7 || hand[1].getRankAsNumber() == 8 || hand[1].getRankAsNumber() == 9;
+//        if (containsHighCard && sameSuit && (firstCardIs78Or9 || secondCardIs78Or9)) {
+//            return true;
+//        }
+
+        return false;
+    }
     private static boolean isFlush(Card[] hand) {
         String suit = hand[0].getSuit();
         for (Card card : hand) {

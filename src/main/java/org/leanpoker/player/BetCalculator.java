@@ -5,6 +5,8 @@ public class BetCalculator {
     public int calculate(GameState gameState, Bet bet) {
         int remaining = gameState.getPlayers().get(gameState.getIn_action()).getStack();
         switch (bet) {
+            case ALL_IN:
+                return remaining;
             case RAISE:
                 return Math.min(remaining, getCall(gameState) + gameState.getMinimum_raise());
             case MATCH:
