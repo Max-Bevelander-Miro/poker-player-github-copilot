@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public class Player {
 
     static BetCalculator betCalculator = new BetCalculator();
-    static final String VERSION = "Default Java folding player";
+    static final String VERSION = "To the moooooon!!!!";
 
     public static int betRequest(JsonNode request) {
         return 0;
@@ -38,11 +38,10 @@ public class Player {
                     .toArray(new Card[0]);
             Card[] allCards = Stream.concat(Arrays.stream(myCards), Arrays.stream(communityCards)).toArray(Card[]::new);
             PokerHandRanking ranking = PokerHandEvaluator.evaluateHand(allCards);
-            if (ranking.ordinal() > 4) {
-                return betCalculator.calculate(gameState, Bet.RAISE);
+            if (ranking.ordinal() > PokerHandRanking.PAIR.ordinal()) {
+                return betCalculator.calculate(gameState, Bet.ALL_IN);
             }
-
-            if (ranking.ordinal() > 2) {
+            if (ranking.ordinal() == PokerHandRanking.PAIR.ordinal()) {
                 return betCalculator.calculate(gameState, Bet.MATCH);
             }
             return betCalculator.calculate(gameState, Bet.FOLD);
@@ -51,6 +50,7 @@ public class Player {
             throw ex;
         }
     }
+    //
 
     private static boolean isOpeningHand(GameState gameState) {
         return gameState.getCommunity_cards().isEmpty();
