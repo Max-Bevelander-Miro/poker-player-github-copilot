@@ -7,9 +7,9 @@ public class PokerHandEvaluator {
     public static Bet evaluateOpeningHand(Card[] hand) {
         if (isGoodHand(hand)) {
             return Bet.ALL_IN;
-        } else if (hand[0].getRankAsNumber() == hand[1].getRankAsNumber()) {
+        } else if (isPairFirstHand(hand)) {
             return Bet.RAISE;
-        } else if (hand[0].getSuit().equals(hand[1].getSuit())) {
+        } else if (isSameSuitFirstHand(hand)) {
             return Bet.RAISE;
         } else if (areConnectingCards(hand) && (hand[0].getRankAsNumber() >= 8 || hand[1].getRankAsNumber() >= 8)) {
             return Bet.RAISE;
@@ -18,6 +18,14 @@ public class PokerHandEvaluator {
         } else {
             return Bet.FOLD;
         }
+    }
+
+    private static boolean isPairFirstHand(Card[] hand) {
+        return hand[0].getRankAsNumber() == hand[1].getRankAsNumber();
+    }
+
+    private static boolean isSameSuitFirstHand(Card[] hand) {
+        return hand[0].getSuit().equals(hand[1].getSuit());
     }
 
     private static boolean areConnectingCards(Card[] hand) {
