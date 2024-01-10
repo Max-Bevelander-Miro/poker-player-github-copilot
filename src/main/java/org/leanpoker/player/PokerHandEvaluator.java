@@ -10,6 +10,8 @@ public class PokerHandEvaluator {
             return Bet.RAISE;
         } else if (hand[0].getSuit().equals(hand[1].getSuit())) {
             return Bet.RAISE;
+        } else if (Math.abs(hand[0].getRankAsNumber() - hand[1].getRankAsNumber()) == 1) {
+            return Bet.RAISE;
         } else if (hand[0].getRankAsNumber() >= 14 || hand[1].getRankAsNumber() >= 14) {
             return Bet.RAISE;
         } else {
