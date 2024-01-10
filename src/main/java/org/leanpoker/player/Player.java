@@ -34,7 +34,8 @@ public class Player {
     private static int getNextHandCalc(GameState gameState, PlayerObj player) {
         try {
             Card[] myCards = player.getHole_cards();
-            Card[] communityCards = (Card[]) gameState.getCommunity_cards().toArray();
+            Card[] communityCards = gameState.getCommunity_cards()
+                    .toArray(new Card[0]);
             Card[] allCards = Stream.concat(Arrays.stream(myCards), Arrays.stream(communityCards)).toArray(Card[]::new);
             PokerHandRanking ranking = PokerHandEvaluator.evaluateHand(allCards);
             if (ranking.ordinal() > 4) {

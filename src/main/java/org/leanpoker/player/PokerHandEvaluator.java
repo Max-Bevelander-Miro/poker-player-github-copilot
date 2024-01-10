@@ -61,6 +61,34 @@ public class PokerHandEvaluator {
 
         return false;
     }
+    public static PokerHandRanking evaluateAllCombinations(Card[] cards) {
+        List<Card[]> combinations = generateCombinations(cards);
+        PokerHandRanking bestRanking = PokerHandRanking.HIGH_CARD;
+        for (Card[] combination : combinations) {
+            PokerHandRanking ranking = evaluateHand(combination);
+            if (ranking.ordinal() > bestRanking.ordinal()) {
+                bestRanking = ranking;
+            }
+        }
+        return bestRanking;
+    }
+    public static List<Card[]> generateCombinations(Card[] cards) {
+        List<Card[]> combinations = new ArrayList<>();
+        generateCombinations(cards, 5, 0, new Card[5], combinations);
+        return combinations;
+    }
+
+    private static void generateCombinations(Card[] cards, int len, int startPosition, Card[] result, List<Card[]> combinations) {
+        if (len == 0) {
+            combinations.add(result.clone());
+            return;
+        }
+        for (int i = startPosition; i <= cards.length - len; i++) {
+            result[result.length - len] = cards[i];
+            generateCombinations(cards, len - 1, i + 1, result, combinations);
+        }
+    }
+
     private static boolean isFlush(Card[] hand) {
         String suit = hand[0].getSuit();
         for (Card card : hand) {
