@@ -5,6 +5,7 @@ public class BetCalculator {
     public int calculate(GameState gameState, Bet bet) {
         PlayerObj currentPlayer = gameState.getPlayers().get(gameState.getIn_action());
         int remaining = currentPlayer.getStack();
+        int call = getCall(gameState, currentPlayer);
         switch (bet) {
             case ALL_IN:
                 return remaining;
@@ -15,12 +16,15 @@ public class BetCalculator {
                 if (currentPlayer.getBet() > (totalAvailableAtStartOfRound / 3)) {
                     return 0;
                 }
-                return getCall(gameState, currentPlayer) + (3 * gameState.getMinimum_raise());
+                return call + (3 * gameState.getMinimum_raise());
             case RAISE:
-                return Math.min(remaining, getCall(gameState, currentPlayer) + gameState.getMinimum_raise());
+                return Math.min(remaining, call + gameState.getMinimum_raise());
             case MATCH:
-                return Math.min(remaining, getCall(gameState, currentPlayer));
+                return Math.min(remaining, call);
             case FOLD:
+                if (call <= 10) {
+                    return call;
+                }
                 return 0;
             default:
                 return 0;
