@@ -7,17 +7,9 @@ public class PlayerObj {
     private String version;
     private int stack;
     private int bet;
+    private Card[] hole_cards;
 
     public PlayerObj() {}
-
-    public PlayerObj(int id, String name, String status, String version, int stack, int bet) {
-        this.id = id;
-        this.name = name;
-        this.status = status;
-        this.version = version;
-        this.stack = stack;
-        this.bet = bet;
-    }
 
     public int getId() {
         return id;
@@ -65,5 +57,13 @@ public class PlayerObj {
 
     public void setBet(int bet) {
         this.bet = bet;
+    }
+
+    public Card[] getHole_cards() {
+        return hole_cards;
+    }
+
+    public void setHole_cards(Card[] hole_cards) {
+        this.hole_cards = hole_cards;
     }
 }
