@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.Map;
 
@@ -25,28 +26,24 @@ public class PlayerController {
     @Post(produces = MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String doPost(@Body Map<String, String> body) throws JsonProcessingException {
-        ObjectMapper mapper = getMapper();
-        String action = body.get("action");
-        String gameState = body.get("game_state");
-        if ("bet_request".equals(action)) {
-            return String.valueOf(getBetRequest(gameState, mapper));
-        }
-        if ("showdown".equals(action)) {
-            Player.showdown(mapper.readTree(gameState));
-        }
-        if ("version".equals(action)) {
-            return Player.VERSION;
-        }
-        return "";
-    }
-
-    private int getBetRequest(String gameState, ObjectMapper mapper) throws JsonProcessingException {
         try {
-            GameState gameStateObj = mapper.readValue(gameState, GameState.class);
-            return Player.betRequest(gameStateObj);
+            ObjectMapper mapper = getMapper();
+            String action = body.get("action");
+            String gameState = body.get("game_state");
+            if ("bet_request".equals(action)) {
+                GameState gameStateObj = mapper.readValue(gameState, GameState.class);
+                return String.valueOf(Player.betRequest(gameStateObj));
+            }
+            if ("showdown".equals(action)) {
+                Player.showdown(mapper.readTree(gameState));
+            }
+            if ("version".equals(action)) {
+                return Player.VERSION;
+            }
+            return "";
         } catch (Exception ex) {
-            System.out.println("Exception: " + ex.getMessage());
-            return Player.betRequest(mapper.readTree(gameState));
+            System.out.println(ExceptionUtils.getStackTrace(ex));
+            throw ex;
         }
     }
 }
