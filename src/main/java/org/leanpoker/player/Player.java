@@ -3,16 +3,13 @@ package org.leanpoker.player;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Player {
 
     static BetCalculator betCalculator = new BetCalculator();
-    static final String VERSION = "To the moooooon!!!!";
+    static final String VERSION = "fightttttt!";
 
     public static int betRequest(JsonNode request) {
         return 0;
@@ -52,7 +49,7 @@ public class Player {
 //                if (checkIfWeakPair(allCards)) {
 //                    return betCalculator.calculate(gameState, Bet.FOLD);
 //                }
-                return betCalculator.calculate(gameState, Bet.MATCH);
+                return betCalculator.calculate(gameState, Bet.FOLD);
             }
             return betCalculator.calculate(gameState, Bet.FOLD);
         } catch (Exception ex) {
@@ -90,12 +87,8 @@ public class Player {
                 rankCounts.put(card.getRankAsNumber(), 1);
             }
         }
-
-        Arrays.sort(hand, Collections.reverseOrder());
-        if (hand[1].getRankAsNumber() > pairRank) {
-            return true;
-        }
-        return false;
+        Arrays.sort(hand, Comparator.comparing(Card::getRankAsNumber).reversed());
+        return hand[1].getRankAsNumber() > pairRank;
     }
 
     private static boolean isOpeningHand(GameState gameState) {
