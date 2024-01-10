@@ -2,9 +2,6 @@ package org.leanpoker.player;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class Player {
 
     static PokerHandEvaluator pokerHandEvaluator = new PokerHandEvaluator();
@@ -17,7 +14,11 @@ public class Player {
 
     public static int betRequest(GameState gameState) {
 
-        PlayerObj player = gameState.getPlayers().stream().filter(p -> p.getHole_cards().length > 0).findFirst().orElse(null);
+        PlayerObj player = gameState.getPlayers().stream()
+                .filter(playerObj -> playerObj.getHole_cards() != null)
+                .filter(p -> p.getHole_cards().length > 0)
+                .findFirst()
+                .orElse(null);
         if(player == null){
             return 0;
         }
