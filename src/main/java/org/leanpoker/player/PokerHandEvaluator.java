@@ -6,11 +6,11 @@ public class PokerHandEvaluator {
 
     public static Bet evaluateOpeningHand(Card[] hand) {
         if (firstHandBothHighCards(hand)) {
-            return Bet.ALL_IN;
+            return Bet.ONE_THIRD_RAISE;
         }
 
         if (isPairFirstHand(hand) && hand[0].getRankAsNumber() >= 8) {
-            return Bet.ALL_IN;
+            return Bet.ONE_THIRD_RAISE;
         }
 
         return Bet.FOLD;
