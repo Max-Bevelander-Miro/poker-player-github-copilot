@@ -11,13 +11,17 @@ public class PokerHandEvaluator {
             return Bet.RAISE;
         } else if (hand[0].getSuit().equals(hand[1].getSuit())) {
             return Bet.RAISE;
-        } else if (Math.abs(hand[0].getRankAsNumber() - hand[1].getRankAsNumber()) == 1) {
+        } else if (areConnectingCards(hand) && (hand[0].getRankAsNumber() >= 8 || hand[1].getRankAsNumber() >= 8)) {
             return Bet.RAISE;
         } else if (hand[0].getRankAsNumber() >= 14 || hand[1].getRankAsNumber() >= 14) {
             return Bet.RAISE;
         } else {
             return Bet.FOLD;
         }
+    }
+
+    private static boolean areConnectingCards(Card[] hand) {
+        return Math.abs(hand[0].getRankAsNumber() - hand[1].getRankAsNumber()) == 1;
     }
 
     public static PokerHandRanking evaluateHand(Card[] hand) {
