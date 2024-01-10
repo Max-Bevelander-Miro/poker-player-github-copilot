@@ -5,27 +5,44 @@ import java.util.*;
 public class PokerHandEvaluator {
 
     public static Bet evaluateOpeningHand(Card[] hand) {
-        if (isGoodHand(hand)) {
+        // two high cards = raise
+        // pair = raise
+
+        if (firstHandBothHighCards(hand)) {
             return Bet.ALL_IN;
-        } else if (isOneThirdHand(hand)) {
-            return Bet.ONE_THIRD_RAISE;
-        } else if (isPairFirstHand(hand)) {
-            return Bet.RAISE;
-        } else if (isSameSuitFirstHand(hand)) {
-            return Bet.RAISE;
-        } else if (hand[0].getRankAsNumber() >= 13 || hand[1].getRankAsNumber() >= 13) {
-            return Bet.RAISE;
-        } else if (areConnectingCards(hand) && (hand[0].getRankAsNumber() >= 8 || hand[1].getRankAsNumber() >= 8)) {
-            return Bet.MATCH_TO_ONE_THIRD;
-        } else if (firstHandContainsHighCard(hand)) {
-            return Bet.MATCH;
-        } else {
-            return Bet.FOLD;
         }
+
+        if (isPairFirstHand(hand) && hand[0].getRankAsNumber() >= 8) {
+            return Bet.ALL_IN;
+        }
+
+        return Bet.FOLD;
+
+//        if (isGoodHand(hand)) {
+//            return Bet.ALL_IN;
+//        } else if (isOneThirdHand(hand)) {
+//            return Bet.ONE_THIRD_RAISE;
+//        } else if (isPairFirstHand(hand)) {
+//            return Bet.RAISE;
+//        } else if (isSameSuitFirstHand(hand)) {
+//            return Bet.RAISE;
+//        } else if (hand[0].getRankAsNumber() >= 13 || hand[1].getRankAsNumber() >= 13) {
+//            return Bet.RAISE;
+//        } else if (areConnectingCards(hand) && (hand[0].getRankAsNumber() >= 8 || hand[1].getRankAsNumber() >= 8)) {
+//            return Bet.MATCH_TO_ONE_THIRD;
+//        } else if (firstHandContainsHighCard(hand)) {
+//            return Bet.MATCH;
+//        } else {
+//            return Bet.FOLD;
+//        }
     }
 
     private static boolean firstHandContainsHighCard(Card[] hand) {
         return hand[0].getRankAsNumber() >= 10 || hand[1].getRankAsNumber() >= 10;
+    }
+
+    private static boolean firstHandBothHighCards(Card[] hand) {
+        return hand[0].getRankAsNumber() >= 10 && hand[1].getRankAsNumber() >= 10;
     }
 
     private static boolean isPairFirstHand(Card[] hand) {
