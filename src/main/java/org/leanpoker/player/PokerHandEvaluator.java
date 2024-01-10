@@ -1,6 +1,7 @@
 package org.leanpoker.player;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class PokerHandEvaluator {
 
@@ -98,8 +99,37 @@ public class PokerHandEvaluator {
         return isSameSuitFirstHand(hand) && firstHandContainsHighCard(hand);
     }
 
-    public static PokerHandRanking evaluateAllCombinations(Card[] cards) {
-        List<Card[]> combinations = generateCombinations(cards);
+    public static PokerHandRanking evaluateAllCombinations(Card[] cardsInHand, Card[] cardsOnTable) {
+
+        List<Card[]> combinations = new ArrayList<>();
+
+        if (cardsOnTable.length == 3){
+            Card[] baseCombination = Stream.concat(Arrays.stream(cardsInHand), Arrays.stream(cardsOnTable)).toArray(Card[]::new);
+            combinations.add(baseCombination);
+        } else{
+            // case 2 in hand
+            List<Card[]> tableCombinations = generateCombinations(3, cardsOnTable);
+            List<Card[]> handCombinations = generateCombinations(2, cardsInHand);
+
+            for (Card[] tableCombination : tableCombinations) {
+                for (Card[] handCombination : handCombinations) {
+                    Card[] combination = Stream.concat(Arrays.stream(tableCombination), Arrays.stream(handCombination)).toArray(Card[]::new);
+                    combinations.add(combination);
+                }
+            }
+            // case 1 in hand
+            tableCombinations = generateCombinations(4, cardsOnTable);
+            handCombinations = generateCombinations(1, cardsInHand);
+
+            for (Card[] tableCombination : tableCombinations) {
+                for (Card[] handCombination : handCombinations) {
+                    Card[] combination = Stream.concat(Arrays.stream(tableCombination), Arrays.stream(handCombination)).toArray(Card[]::new);
+                    combinations.add(combination);
+                }
+            }
+
+        }
+
         PokerHandRanking bestRanking = PokerHandRanking.HIGH_CARD;
         for (Card[] combination : combinations) {
             PokerHandRanking ranking = evaluateHand(combination);
@@ -109,22 +139,26 @@ public class PokerHandEvaluator {
         }
         return bestRanking;
     }
-    public static List<Card[]> generateCombinations(Card[] cards) {
+
+    public static List<Card[]> generateCombinations(int length, Card[] cardsOnTable) {
         List<Card[]> combinations = new ArrayList<>();
-        generateCombinations(cards, 5, 0, new Card[5], combinations);
+        generateCombinationsHelper(cardsOnTable, 0, new Card[length], 0, combinations);
         return combinations;
     }
 
-    private static void generateCombinations(Card[] cards, int len, int startPosition, Card[] result, List<Card[]> combinations) {
-        if (len == 0) {
-            combinations.add(result.clone());
+    private static void generateCombinationsHelper(Card[] cardsOnTable, int index, Card[] currentCombination, int length, List<Card[]> combinations) {
+        if (length == currentCombination.length) {
+            combinations.add(currentCombination.clone());
             return;
         }
-        for (int i = startPosition; i <= cards.length - len; i++) {
-            result[result.length - len] = cards[i];
-            generateCombinations(cards, len - 1, i + 1, result, combinations);
+        if (index == cardsOnTable.length) {
+            return;
         }
+        currentCombination[length] = cardsOnTable[index];
+        generateCombinationsHelper(cardsOnTable, index + 1, currentCombination, length + 1, combinations);
+        generateCombinationsHelper(cardsOnTable, index + 1, currentCombination, length, combinations);
     }
+
 
     private static boolean isFlush(Card[] hand) {
         String suit = hand[0].getSuit();

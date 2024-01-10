@@ -37,11 +37,21 @@ public class Player {
             Card[] communityCards = gameState.getCommunity_cards()
                     .toArray(new Card[0]);
             Card[] allCards = Stream.concat(Arrays.stream(myCards), Arrays.stream(communityCards)).toArray(Card[]::new);
-            PokerHandRanking ranking = PokerHandEvaluator.evaluateHand(allCards);
+            PokerHandRanking ranking = null;
+            try {
+                ranking = PokerHandEvaluator.evaluateAllCombinations(myCards, communityCards);
+            }catch (Exception ex){
+                System.out.println(ExceptionUtils.getStackTrace(ex));
+                ranking = PokerHandEvaluator.evaluateHand(allCards);
+            }
             if (ranking.ordinal() > PokerHandRanking.PAIR.ordinal()) {
                 return betCalculator.calculate(gameState, Bet.ALL_IN);
             }
             if (ranking.ordinal() == PokerHandRanking.PAIR.ordinal()) {
+                // if pair not in hand FOLD
+                if (!checkIfWeHavePair(allCards, myCards)) {
+                    return betCalculator.calculate(gameState, Bet.FOLD);
+                }
                 // if pair is highest in table
                 if (checkIfHighestPair(allCards)) {
                     return betCalculator.calculate(gameState, Bet.ALL_IN);
@@ -74,6 +84,28 @@ public class Player {
             }
         }
         return maxRank == pairRank;
+    }
+
+    private static boolean checkIfWeHavePair(Card[] hand, Card[] ourCards) {
+
+        int pairRank = -1;
+
+        Map<Integer, Integer> rankCounts = new HashMap<>();
+        for (Card card : hand) {
+            if (rankCounts.containsKey(card.getRankAsNumber())) {
+                pairRank = card.getRankAsNumber();
+            } else {
+                rankCounts.put(card.getRankAsNumber(), 1);
+            }
+        }
+
+        for (Card card : ourCards) {
+            if (card.getRankAsNumber() == pairRank) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static boolean checkIfWeakPair(Card[] hand) {
