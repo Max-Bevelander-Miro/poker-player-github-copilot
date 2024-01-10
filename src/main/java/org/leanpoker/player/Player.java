@@ -39,7 +39,7 @@ public class Player {
             Card[] allCards = Stream.concat(Arrays.stream(myCards), Arrays.stream(communityCards)).toArray(Card[]::new);
             PokerHandRanking ranking = null;
             try {
-                ranking = PokerHandEvaluator.evaluateAllCombinations(myCards, communityCards);
+                ranking = PokerHandEvaluator.evaluateHand(allCards);
             }catch (Exception ex){
                 System.out.println(ExceptionUtils.getStackTrace(ex));
                 ranking = PokerHandEvaluator.evaluateHand(allCards);
