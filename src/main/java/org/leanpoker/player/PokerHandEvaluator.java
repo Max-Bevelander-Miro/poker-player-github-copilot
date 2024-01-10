@@ -49,9 +49,9 @@ public class PokerHandEvaluator {
         if (isPair && hand[0].getRankAsNumber() > 8 && hand[1].getRankAsNumber() > 8) {
             return true;
         }
-//        if (hand[0].getRankAsNumber() > 9 && hand[1].getRankAsNumber() > 9) {
-//            return true;
-//        }
+        if (hand[0].getRankAsNumber() > 9 && hand[1].getRankAsNumber() > 9) {
+            return true;
+        }
 //        boolean containsHighCard = hand[0].getRankAsNumber() > 9 || hand[1].getRankAsNumber() > 9;
 //        boolean sameSuit = hand[0].getSuit().equals(hand[1].getSuit());
 //        boolean firstCardIs78Or9 = hand[0].getRankAsNumber() == 7 || hand[0].getRankAsNumber() == 8 || hand[0].getRankAsNumber() == 9;
