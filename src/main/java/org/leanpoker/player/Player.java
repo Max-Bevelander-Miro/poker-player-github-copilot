@@ -1,6 +1,7 @@
 package org.leanpoker.player;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -31,18 +32,23 @@ public class Player {
     }
 
     private static int getNextHandCalc(GameState gameState, PlayerObj player) {
-        Card[] myCards = player.getHole_cards();
-        Card[] communityCards = (Card[]) gameState.getCommunity_cards().toArray();
-        Card[] allCards = Stream.concat(Arrays.stream(myCards), Arrays.stream(communityCards)).toArray(Card[]::new);
-        PokerHandRanking ranking = PokerHandEvaluator.evaluateHand(allCards);
-        if (ranking.ordinal() > 4) {
-            return betCalculator.calculate(gameState, Bet.RAISE);
-        }
+        try {
+            Card[] myCards = player.getHole_cards();
+            Card[] communityCards = (Card[]) gameState.getCommunity_cards().toArray();
+            Card[] allCards = Stream.concat(Arrays.stream(myCards), Arrays.stream(communityCards)).toArray(Card[]::new);
+            PokerHandRanking ranking = PokerHandEvaluator.evaluateHand(allCards);
+            if (ranking.ordinal() > 4) {
+                return betCalculator.calculate(gameState, Bet.RAISE);
+            }
 
-        if (ranking.ordinal() > 2) {
-            return betCalculator.calculate(gameState, Bet.MATCH);
+            if (ranking.ordinal() > 2) {
+                return betCalculator.calculate(gameState, Bet.MATCH);
+            }
+            return betCalculator.calculate(gameState, Bet.FOLD);
+        } catch (Exception ex) {
+            System.out.println(ExceptionUtils.getStackTrace(ex));
+            throw ex;
         }
-        return betCalculator.calculate(gameState, Bet.FOLD);
     }
 
     private static boolean isOpeningHand(GameState gameState) {
