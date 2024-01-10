@@ -49,9 +49,9 @@ public class Player {
                 if (checkIfHighestPair(allCards)) {
                     return betCalculator.calculate(gameState, Bet.ALL_IN);
                 }
-                if (checkIfWeakPair(allCards)) {
-                    return betCalculator.calculate(gameState, Bet.FOLD);
-                }
+//                if (checkIfWeakPair(allCards)) {
+//                    return betCalculator.calculate(gameState, Bet.FOLD);
+//                }
                 return betCalculator.calculate(gameState, Bet.MATCH);
             }
             return betCalculator.calculate(gameState, Bet.FOLD);
