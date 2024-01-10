@@ -6,7 +6,7 @@ public class PokerHandEvaluator {
 
     public static Bet evaluateOpeningHand(Card[] hand) {
         if (isGoodHand(hand)) {
-            return Bet.ONE_THIRD_RAISE;
+            return Bet.ALL_IN;
         } else if (isSameSuitFirstHand(hand) && firstHandContainsHighCard(hand)) {
             return Bet.ONE_THIRD_RAISE;
         } else if (isPairFirstHand(hand)) {
@@ -17,6 +17,8 @@ public class PokerHandEvaluator {
             return Bet.RAISE;
         } else if (areConnectingCards(hand) && (hand[0].getRankAsNumber() >= 8 || hand[1].getRankAsNumber() >= 8)) {
             return Bet.MATCH_TO_ONE_THIRD;
+        } else if (firstHandContainsHighCard(hand)) {
+            return Bet.MATCH;
         } else {
             return Bet.FOLD;
         }
