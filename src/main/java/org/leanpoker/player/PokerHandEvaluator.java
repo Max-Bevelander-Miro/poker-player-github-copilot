@@ -6,7 +6,7 @@ public class PokerHandEvaluator {
 
     public static Bet evaluateOpeningHand(Card[] hand) {
         if (isGoodHand(hand)) {
-            return Bet.ALL_IN;
+            return Bet.ONE_THIRD_RAISE;
         } else if (isSameSuitFirstHand(hand) && firstHandContainsHighCard(hand)) {
             return Bet.ONE_THIRD_RAISE;
         } else if (isPairFirstHand(hand)) {
@@ -74,11 +74,7 @@ public class PokerHandEvaluator {
         boolean sameSuit = hand[0].getSuit().equals(hand[1].getSuit());
         boolean firstCardIs78Or9 = hand[0].getRankAsNumber() == 7 || hand[0].getRankAsNumber() == 8 || hand[0].getRankAsNumber() == 9;
         boolean secondCardIs78Or9 = hand[1].getRankAsNumber() == 7 || hand[1].getRankAsNumber() == 8 || hand[1].getRankAsNumber() == 9;
-        if (containsHighCard && sameSuit && (firstCardIs78Or9 || secondCardIs78Or9)) {
-            return true;
-        }
-
-        return false;
+        return containsHighCard && sameSuit && (firstCardIs78Or9 || secondCardIs78Or9);
     }
     public static PokerHandRanking evaluateAllCombinations(Card[] cards) {
         List<Card[]> combinations = generateCombinations(cards);
