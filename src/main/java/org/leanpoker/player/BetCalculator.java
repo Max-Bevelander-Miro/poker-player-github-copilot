@@ -12,7 +12,7 @@ public class BetCalculator {
             case ALL_IN:
                 return remaining;
             case ONE_THIRD_RAISE:
-                return totalAvailableAtStartOfRound / 3;
+                return Math.max(call, totalAvailableAtStartOfRound / 3);
             case MATCH_TO_ONE_THIRD:
                 if (currentPlayer.getBet() > (totalAvailableAtStartOfRound / 3)) {
                     return 0;
