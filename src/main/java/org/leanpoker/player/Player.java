@@ -10,6 +10,10 @@ public class Player {
         return 0;
     }
 
+    public static int betRequest(GameState gameState) {
+        return 0;
+    }
+
     public static void showdown(JsonNode game) {
     }
 }

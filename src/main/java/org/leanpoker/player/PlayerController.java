@@ -9,6 +9,8 @@ import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 
 @Controller()
@@ -27,7 +29,7 @@ public class PlayerController {
         String action = body.get("action");
         String gameState = body.get("game_state");
         if ("bet_request".equals(action)) {
-            return String.valueOf(Player.betRequest(mapper.readTree(gameState)));
+            return String.valueOf(getBetRequest(gameState));
         }
         if ("showdown".equals(action)) {
             Player.showdown(mapper.readTree(gameState));
@@ -38,4 +40,13 @@ public class PlayerController {
         return "";
     }
 
+    private int getBetRequest(String gameState) throws JsonProcessingException {
+        try {
+            GameState gameStateObj = mapper.readValue(gameState, GameState.class);
+            return Player.betRequest(gameStateObj);
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+            return Player.betRequest(mapper.readTree(gameState));
+        }
+    }
 }
