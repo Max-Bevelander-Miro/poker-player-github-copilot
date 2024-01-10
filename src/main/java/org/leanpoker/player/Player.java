@@ -2,8 +2,13 @@ package org.leanpoker.player;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Player {
 
+    static PokerHandEvaluator pokerHandEvaluator = new PokerHandEvaluator();
+    static BetCalculator betCalculator = new BetCalculator();
     static final String VERSION = "Default Java folding player";
 
     public static int betRequest(JsonNode request) {
@@ -17,13 +22,14 @@ public class Player {
             return 0;
         }
         //is opening hand
-        if (gameState.getCommunity_cards().isEmpty()){
-
-        } else{
-
+        if (isOpeningHand(gameState)){
+            return betCalculator.calculate(gameState, PokerHandEvaluator.evaluateOpeningHand(player.getHole_cards()));
         }
-
         return 0;
+    }
+
+    private static boolean isOpeningHand(GameState gameState) {
+        return gameState.getCommunity_cards().isEmpty();
     }
 
     public static void showdown(JsonNode game) {

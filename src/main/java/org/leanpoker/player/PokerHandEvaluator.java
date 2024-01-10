@@ -4,6 +4,19 @@ import java.util.*;
 
 public class PokerHandEvaluator {
 
+    public static Bet evaluateOpeningHand(Card[] hand) {
+        // I will have 2 cards, give me if the rank match or the suit match or 1 card rank is A or K
+        if (hand[0].getRankAsNumber() == hand[1].getRankAsNumber()) {
+            return Bet.RAISE;
+        } else if (hand[0].getSuit().equals(hand[1].getSuit())) {
+            return Bet.RAISE;
+        } else if (hand[0].getRankAsNumber() >= 13 || hand[1].getRankAsNumber() >= 13) {
+            return Bet.RAISE;
+        } else {
+            return Bet.FOLD;
+        }
+    }
+
     public static PokerHandRanking evaluateHand(Card[] hand) {
         if (isRoyalFlush(hand)) {
             return PokerHandRanking.ROYAL_FLUSH;
