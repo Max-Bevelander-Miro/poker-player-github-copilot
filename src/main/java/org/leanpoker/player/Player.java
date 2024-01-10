@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class Player {
@@ -42,6 +44,10 @@ public class Player {
                 return betCalculator.calculate(gameState, Bet.ALL_IN);
             }
             if (ranking.ordinal() == PokerHandRanking.PAIR.ordinal()) {
+                // if pair is highest in table
+                if (checkIfHighestPair(allCards)) {
+                    return betCalculator.calculate(gameState, Bet.ALL_IN);
+                }
                 return betCalculator.calculate(gameState, Bet.MATCH);
             }
             return betCalculator.calculate(gameState, Bet.FOLD);
@@ -51,6 +57,23 @@ public class Player {
         }
     }
     //
+
+    private static boolean checkIfHighestPair(Card[] hand) {
+
+        int maxRank = -1;
+        int pairRank = -1;
+
+        Map<Integer, Integer> rankCounts = new HashMap<>();
+        for (Card card : hand) {
+            maxRank = Math.max(maxRank, card.getRankAsNumber());
+            if (rankCounts.containsKey(card.getRankAsNumber())) {
+                pairRank = card.getRankAsNumber();
+            } else {
+                rankCounts.put(card.getRankAsNumber(), 1);
+            }
+        }
+        return maxRank == pairRank;
+    }
 
     private static boolean isOpeningHand(GameState gameState) {
         return gameState.getCommunity_cards().isEmpty();
