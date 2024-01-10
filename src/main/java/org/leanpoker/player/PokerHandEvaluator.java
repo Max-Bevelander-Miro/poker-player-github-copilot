@@ -5,9 +5,6 @@ import java.util.*;
 public class PokerHandEvaluator {
 
     public static Bet evaluateOpeningHand(Card[] hand) {
-        // two high cards = raise
-        // pair = raise
-
         if (firstHandBothHighCards(hand)) {
             return Bet.ALL_IN;
         }

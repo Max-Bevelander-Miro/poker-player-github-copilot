@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 public class Player {
 
     static BetCalculator betCalculator = new BetCalculator();
-    static final String VERSION = "fightttttt!";
+    static final String VERSION = "Stonks";
 
     public static int betRequest(JsonNode request) {
         return 0;

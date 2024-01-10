@@ -6,6 +6,11 @@ public class BetCalculator {
         PlayerObj currentPlayer = gameState.getPlayers().get(gameState.getIn_action());
         int remaining = currentPlayer.getStack();
         int call = getCall(gameState, currentPlayer);
+
+        if (call <= 10) {
+            return call;
+        }
+
         switch (bet) {
             case ALL_IN:
                 return remaining;
@@ -22,9 +27,6 @@ public class BetCalculator {
             case MATCH:
                 return Math.min(remaining, call);
             case FOLD:
-                if (call <= 10) {
-                    return call;
-                }
                 return 0;
             default:
                 return 0;

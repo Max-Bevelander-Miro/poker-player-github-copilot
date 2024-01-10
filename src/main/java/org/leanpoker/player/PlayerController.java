@@ -26,6 +26,7 @@ public class PlayerController {
     @Post(produces = MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public String doPost(@Body Map<String, String> body) throws JsonProcessingException {
+        System.out.println("Hello world");
         try {
             ObjectMapper mapper = getMapper();
             String action = body.get("action");
