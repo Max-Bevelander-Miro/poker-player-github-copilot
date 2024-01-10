@@ -5,5 +5,6 @@ public enum Bet {
     MATCH,
     FOLD,
     ONE_THIRD_RAISE,
+    MATCH_TO_ONE_THIRD,
     ALL_IN
 }

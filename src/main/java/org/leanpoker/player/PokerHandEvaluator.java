@@ -13,10 +13,10 @@ public class PokerHandEvaluator {
             return Bet.RAISE;
         } else if (isSameSuitFirstHand(hand)) {
             return Bet.RAISE;
-        } else if (areConnectingCards(hand) && (hand[0].getRankAsNumber() >= 8 || hand[1].getRankAsNumber() >= 8)) {
-            return Bet.RAISE;
         } else if (hand[0].getRankAsNumber() >= 13 || hand[1].getRankAsNumber() >= 13) {
             return Bet.RAISE;
+        } else if (areConnectingCards(hand) && (hand[0].getRankAsNumber() >= 8 || hand[1].getRankAsNumber() >= 8)) {
+            return Bet.MATCH_TO_ONE_THIRD;
         } else {
             return Bet.FOLD;
         }
